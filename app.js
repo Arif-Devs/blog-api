@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const swaggerUI = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerDoc = YAML.load('./swagger.yaml')  
-const OpenApiValidator = require ('express-openapi-validator') 
+const OpenApiValidator = require ('express-openapi-validator')
+const User = require('./model/User')
+//const {seeduser} = require('./seed')
 //const Article = require('./models/Article')
 
 //express 
@@ -35,8 +37,11 @@ app.use((err, req, res, next) => {
 
 mongoose.connect(connectionURL).then(()=>{
     console.log('database connected')
-    app.listen(4000, ()=>{
+    app.listen(4000,async ()=>{
         console.log('listening on  port 4000')
+        //seeduser()
+        // const users = await User.find({})
+        // console.log(users)
     })
 }).catch((e)=>{
     console.log('database connection failed')
