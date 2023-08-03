@@ -39,8 +39,7 @@ mongoose.connect(connectionURL,{dbName: process.env.DB_NAME} ).then(()=>{
     console.log('database connected')
     app.listen(4000,async ()=>{
         console.log('listening on  port 4000')
-      const user = await User.findOne({})
-      console.log(user)
+  
     })
 }).catch((e)=>{
     console.log('database connection failed')
