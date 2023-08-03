@@ -33,15 +33,14 @@ app.use((err, req, res, next) => {
  let connectionURL = process.env.DB_CONNECTION_URL
  connectionURL = connectionURL.replace('<username>', process.env.DB_USERNAME)
  connectionURL= connectionURL.replace('<password>', process.env.DB_PASSWORD)
- connectionURL= `${connectionURL}/${process.env.DB_USERNAME}?${process.env.DB_URL_QUERY}`
+//  connectionURL= `${connectionURL}/${process.env.DB_NAME}?${process.env.DB_URL_QUERY}`
 
-mongoose.connect(connectionURL).then(()=>{
+mongoose.connect(connectionURL,{dbName: process.env.DB_NAME} ).then(()=>{
     console.log('database connected')
     app.listen(4000,async ()=>{
         console.log('listening on  port 4000')
-        //seeduser()
-        // const users = await User.find({})
-        // console.log(users)
+      const user = await User.findOne({})
+      console.log(user)
     })
 }).catch((e)=>{
     console.log('database connection failed')
