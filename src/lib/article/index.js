@@ -1,6 +1,6 @@
 const { Article } = require('../../model');
 
-const findAll = async ({
+const findAll = ({
   page = 1,
   limit = 10,
   sortType = 'dsc',
@@ -8,16 +8,20 @@ const findAll = async ({
   search = '',
 }) => {
   const sortStr = `${sortType == 'dsc' ? '-' : ''}${sortKey}`;
-
-  const articles = await Article.find({
+  const filter = {
     title: { $regex: search, $options: 'i' },
-  })
+  };
+  return Article.find(filter)
     .populate({ path: 'author', select: 'name' })
     .sort(sortStr)
     .skip(page * limit - limit)
     .limit(limit);
-
-  return articles;
+};
+const count = ({ search = '' }) => {
+  const filter = {
+    title: { $regex: search, $options: 'i' },
+  };
+  return Article.count(filter);
 };
 
 const create = ({ title, body = '', cover = '', status = 'draft', author }) => {
@@ -39,4 +43,5 @@ const create = ({ title, body = '', cover = '', status = 'draft', author }) => {
 module.exports = {
   findAll,
   create,
+  count,
 };
