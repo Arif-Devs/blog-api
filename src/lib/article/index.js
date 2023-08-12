@@ -1,21 +1,26 @@
 const { Article } = require('../../model');
+const defaults = require('../../api/config/defaults');
 
-const findAll = ({
-  page = 1,
-  limit = 10,
-  sortType = 'dsc',
-  sortKey = 'updatedAt',
-  search = '',
+const findAll = async ({
+  page = defaults.page,
+  limit = defaults.limit,
+  sortType = defaults.sortType,
+  sortBy = defaults.sortBy,
+  search = defaults.search,
 }) => {
-  const sortStr = `${sortType == 'dsc' ? '-' : ''}${sortKey}`;
+  const sortStr = `${sortType == 'dsc' ? '-' : ''}${sortBy}`;
   const filter = {
     title: { $regex: search, $options: 'i' },
   };
-  return Article.find(filter)
+  const article = await Article.find(filter)
     .populate({ path: 'author', select: 'name' })
     .sort(sortStr)
     .skip(page * limit - limit)
     .limit(limit);
+  return article.map((article) => ({
+    ...article._doc,
+    id: article.id,
+  }));
 };
 const count = ({ search = '' }) => {
   const filter = {
