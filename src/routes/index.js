@@ -7,10 +7,10 @@ router
   .post(articleController.create);
 
 router
-  .route('api/v1/articles/:id')
-  .get(articleController.findSingle)
-  .put((req, res) => {})
-  .patch((req, res) => {})
-  .delete((req, res) => {});
+  .route('/api/v1/articles/:id')
+  .get(articleController.findSingleItem)
+  .put(articleController.updateItem)
+  .patch(articleController.updateItemPatch)
+  .delete(articleController.removeItem);
 
 module.exports = router;

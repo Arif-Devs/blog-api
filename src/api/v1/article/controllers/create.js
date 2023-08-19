@@ -16,9 +16,9 @@ const create = async (req, res, next) => {
       massage: 'article created successfully',
       data: { ...article._doc },
       links: {
-        self: `/articles/${article._id}`,
-        author: `/articles/${article._id}`,
-        comments: `/articles/${article._id}/comments`,
+        self: `/articles/${article.id}`,
+        author: `/articles/${article.id}/author`,
+        comments: `/articles/${article.id}/comments`,
       },
     };
     res.status(201).json(response);

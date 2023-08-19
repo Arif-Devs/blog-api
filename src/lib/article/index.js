@@ -1,5 +1,6 @@
 const { Article } = require('../../model');
 const defaults = require('../../api/config/defaults');
+const { notFound } = require('../../../utils/error');
 
 const findAll = async ({
   page = defaults.page,
@@ -29,7 +30,13 @@ const count = ({ search = '' }) => {
   return Article.count(filter);
 };
 
-const create = ({ title, body = '', cover = '', status = 'draft', author }) => {
+const create = async ({
+  title,
+  body = '',
+  cover = '',
+  status = 'draft',
+  author,
+}) => {
   if (!title || !author) {
     const error = new Error('Invalid parameters');
     error.status = 400;
@@ -42,11 +49,93 @@ const create = ({ title, body = '', cover = '', status = 'draft', author }) => {
     status,
     author: author.id,
   });
-  return article.save();
+  await article.save();
+  return {
+    ...article._doc,
+    id: article.id,
+  };
+};
+
+const findSingleItem = async ({ id, expand = '' }) => {
+  if (!id) throw new Error('Id is required');
+
+  expand = expand.split(',').map((item) => item.trim());
+
+  const article = await Article.findById(id);
+  if (!article) {
+    throw notFound();
+  }
+
+  if (expand.includes('author')) {
+    await article.populate({
+      path: 'author',
+      select: 'name',
+      strictPopulate: false,
+    });
+  }
+  if (expand.includes('comment')) {
+    await article.populate({
+      path: 'comments',
+      strictPopulate: false,
+    });
+  }
+
+  return {
+    ...article._doc,
+    id: article.id,
+  };
+};
+
+const updateOrCreate = async (
+  id,
+  { title, body, author, cover = '', status = 'draft' }
+) => {
+  const article = await Article.findById(id);
+  if (!article) {
+    const article = create({ title, body, author, cover, status, author });
+    return {
+      article,
+      code: 201,
+    };
+  }
+  const payload = { title, body, cover, status, author: author.id };
+  article.overwrite(payload);
+  await article.save();
+
+  return { article: { ...article._doc, id: article.id }, code: 200 };
+};
+
+const updateProperties = async (id, { title, body, cover, status }) => {
+  const article = await Article.findById(id);
+  if (!article) {
+    throw notFound();
+  }
+
+  const payload = { title, body, cover, status };
+
+  Object.keys(payload).forEach((key) => {
+    article[key] = payload[key] ?? article[key];
+  });
+
+  await article.save();
+  return { ...article._doc, id: article.id };
+};
+
+const removeItem = async (id) => {
+  const article = await Article.findById(id);
+  if (!article) {
+    throw notFound();
+  }
+
+  return Article.findByIdAndDelete(id);
 };
 
 module.exports = {
   findAll,
   create,
   count,
+  findSingleItem,
+  updateOrCreate,
+  updateProperties,
+  removeItem,
 };

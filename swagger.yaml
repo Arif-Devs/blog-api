@@ -10,10 +10,10 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   # Added by API Auto Mocking Plugin
- 
+
   - url: 'http://localhost:4000/api/v1'
     description: Dev
-tags: 
+tags:
   - name: Auth
     description: Authentication Endpoints (public)
   - name: Article
@@ -33,7 +33,7 @@ paths:
             schema:
               type: object
               properties:
-                name: 
+                name:
                   type: string
                   example: Arif rahman
                 email:
@@ -65,7 +65,7 @@ paths:
                     properties:
                       access_token:
                         type: string
-                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
                   links:
                     type: object
                     properties:
@@ -118,7 +118,7 @@ paths:
                     properties:
                       access_token:
                         type: string
-                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
                   links:
                     type: object
                     properties:
@@ -126,14 +126,14 @@ paths:
                         type: string
                         example: '/auth/signin'
         '400':
-          $ref: '#/components/responses/400'  
+          $ref: '#/components/responses/400'
         '500':
           '$ref': '#/components/responses/500'
   '/articles':
     get:
       tags: [Article]
       description: Retrive all published articles
-      parameters: 
+      parameters:
         - $ref: '#/components/parameters/pageParam'
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/sortTypeParam'
@@ -142,7 +142,7 @@ paths:
       responses:
         '200':
           description: Return a list of articles
-          content: 
+          content:
             'application/json':
               schema:
                 type: object
@@ -157,7 +157,7 @@ paths:
                               type: integer
                               format: int32
                               example: 1
-                            title: 
+                            title:
                               type: string
                               example: first article
                             cover:
@@ -166,7 +166,7 @@ paths:
                               example: https://s3.aws.com/myfirstblog/124.jpg
                             author:
                               $ref: '#/components/schemas/AuthorDTO'
-                            link: 
+                            link:
                               type: string
                               format: url
                               example: '/articles/1'
@@ -239,7 +239,7 @@ paths:
     get:
       tags: [Article]
       description: get a single article
-      parameters: 
+      parameters:
         - $ref: '#/components/parameters/idPathParam'
         - in: query
           name: expand
@@ -250,11 +250,11 @@ paths:
       responses:
         '200':
           description: single article view
-          content: 
+          content:
             'application/json':
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   data:
                     allOf:
                       - $ref: '#/components/schemas/Article'
@@ -268,7 +268,7 @@ paths:
                             type: array
                             items:
                               $ref: '#/components/schemas/Comment'
-                            
+
                   links:
                     type: object
                     properties:
@@ -281,7 +281,7 @@ paths:
                       comments:
                         type: object
                         example: '/articles/1/comments'
-                        
+
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -310,30 +310,29 @@ paths:
                   type: string
                   format: text
                   example: article body
-                cover: 
+                cover:
                   type: string
                   format: url
                   example: 'https://s3.aws.myblog.com/221ddw32'
                 status:
-                 type: string
-                 enum: [draft, published]
-                 example: draft
+                  type: string
+                  enum: [draft, published]
+                  example: draft
               required: [title, body]
-      responses: 
+      responses:
         '200':
-          description: successfully create or update 
+          description: successfully create or update
           content: &article_update_content
             'application/json':
               schema:
-               $ref: '#/components/schemas/ArticleUpdateDTO'
+                $ref: '#/components/schemas/ArticleUpdateDTO'
         '201':
-            description: 'successfully Create'  
-            content:
-              'application/json':
-                schema:
-                  $ref: '#/components/schemas/ArticleCreateDTO'
-            
-                            
+          description: 'successfully Create'
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ArticleCreateDTO'
+
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -353,7 +352,6 @@ paths:
             schema:
               type: object
               properties:
-                
                 title:
                   type: string
                   example: article title
@@ -361,24 +359,23 @@ paths:
                   type: string
                   format: text
                   example: article body
-                cover: 
+                cover:
                   type: string
                   format: url
                   example: 'https://s3.aws.myblog.com/221ddw32'
                 status:
-                 type: string
-                 enum: [draft, published]
-                 example: draft
-             
-      responses: 
+                  type: string
+                  enum: [draft, published]
+                  example: draft
+
+      responses:
         '200':
-          description: successfully update 
-          content: 
+          description: successfully update
+          content:
             'application/json':
               schema:
-                 $ref: '#/components/schemas/ArticleCreateDTO'
-       
-                            
+                $ref: '#/components/schemas/ArticleCreateDTO'
+
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -389,12 +386,12 @@ paths:
           $ref: '#/components/responses/500'
     delete:
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       tags: [Article]
       description: Delete an article by id
       parameters:
         - $ref: '#/components/parameters/idPathParam'
-      responses: 
+      responses:
         '204':
           description: 'Article delete successfully'
         '401':
@@ -403,7 +400,6 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
-
 
 components:
   securitySchemes:
@@ -442,7 +438,7 @@ components:
           required: [id, authorId, title, body, status]
         - $ref: '#/components/schemas/Timestamp'
     Comment:
-       allOf:
+      allOf:
         - type: object
           properties:
             id:
@@ -457,12 +453,12 @@ components:
               type: integer
               format: int32
               example: 1
-           
+
             body:
               type: string
               format: text
               example: The body of the comment
-            
+
             status:
               type: string
               enum: [public, private]
@@ -472,7 +468,7 @@ components:
     ArticleCreateDTO:
       type: object
       properties:
-        code: 
+        code:
           type: integer
           format: int32
           example: 201
@@ -497,17 +493,16 @@ components:
               format: url
               example: '/articles/1/comments'
     ArticleUpdateDTO:
-      
       type: object
       properties:
-        code: 
+        code:
           type: integer
           format: int32
           example: 200
         massage:
           type: string
           example: Article update successfully
-        data: 
+        data:
           $ref: '#/components/schemas/Article'
         links:
           type: object
@@ -532,7 +527,7 @@ components:
           type: integer
           format: int32
           example: 1
-        name: 
+        name:
           type: string
           example: 'Arif'
       required: [id, name]
@@ -605,7 +600,7 @@ components:
                 items:
                   type: object
                   properties:
-                    field: 
+                    field:
                       type: string
                       example: email
                     message:
@@ -694,9 +689,8 @@ components:
       required: true
       description: Article ID
       schema:
-        type: integer
-        format: int32
-        example: 1
+        type: string
+        example: '64cbbacab5e420563e2785d4'
     inPathParam:
       in: path
       name: id
